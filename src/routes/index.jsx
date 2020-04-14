@@ -2,7 +2,8 @@ import React from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { MainTemplate } from "../templates/main";
 import { Dashboard } from "./dashboard";
-export const Routes = ({ children }) => {
+import { ResourceClaimsProvider } from "../contexts/resource_claims";
+export const Routes = () => {
   return (
     <div>
       <BrowserRouter>
@@ -11,7 +12,15 @@ export const Routes = ({ children }) => {
           <Route path={["/dashboard"]}>
             <MainTemplate>
               <Switch>
-                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/dashboard">
+                  {(props) => {
+                    return (
+                      <ResourceClaimsProvider>
+                        <Dashboard {...props} />
+                      </ResourceClaimsProvider>
+                    );
+                  }}
+                </Route>
               </Switch>
             </MainTemplate>
           </Route>

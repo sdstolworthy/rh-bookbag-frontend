@@ -23,7 +23,7 @@ export const MainTemplate = React.memo(({ children }) => {
             <div>
               <Toolbar>
                 <Brand
-                  alt="Open Innovation Labs"
+                  alt="Project Bookbag"
                   src={`${process.env.PUBLIC_URL}/oil_logo.png`}
                 ></Brand>
                 <div style={{ width: 50 }} />
