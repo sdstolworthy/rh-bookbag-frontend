@@ -4,9 +4,9 @@ import propTypes from "prop-types";
 import { useContext } from "react";
 import { ResourceClaims } from "../../contexts/resource_claims";
 import { useEffect } from "react";
-import { ResourceClaimTable } from "./components/resource_claim_table";
+import { ResourceClaimTable } from "../../components/resource_claim_table";
 
-export const Dashboard = () => {
+export const ResourceClaimsDashboard = () => {
   const resourceClaimContext = useContext(ResourceClaims);
 
   useEffect(() => {
@@ -39,6 +39,6 @@ export const Dashboard = () => {
   );
 };
 
-Dashboard.propTypes = {
+ResourceClaimsDashboard.propTypes = {
   children: propTypes.node,
 };
