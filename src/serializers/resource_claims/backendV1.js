@@ -6,6 +6,7 @@ export class BackendV1ResourceClaimSerializer {
     return new ResourceClaim({
       name: map["name"],
       id: map["id"],
+      namespace: map["namespace"],
       resources: (map["resources"] ?? []).map((resource) => {
         return BackendV1ResourceSerializer.serialize(resource);
       }),

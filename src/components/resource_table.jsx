@@ -1,29 +1,72 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table, TableHeader, TableBody } from "@patternfly/react-table";
+import { AdditionalInfoPopup } from "./additional_info_popup";
+
+const ProvisionData = ({ provisionData, onClick }) => {
+  return provisionData ? (
+    <div onClick={onClick}>See Data</div>
+  ) : (
+    <i>Not available</i>
+  );
+};
+
+const ProvisionMessage = ({ messages, onClick }) => {
+  if (!messages || messages?.length === 0) {
+    return <i>No messages</i>;
+  }
+  return <div onClick={onClick}>Show Messages</div>;
+};
 
 export const ResourceTable = ({ resources }) => {
-  // return <pre>{JSON.stringify(resources, null, 2)}</pre>;
+  const [popupData, setPopupData] = useState(null);
+
   function serializeResourcesToTableObject(resources) {
     const columns = [
-      {
-        title: "ID",
-        accessor: "id",
-      },
       {
         title: "Current State",
         accessor: "current_state",
       },
       {
+        title: "Governor",
+        accessor: "governor",
+      },
+      {
+        title: "Provision Messages",
+        accessor: "provision_messages",
+        render: (content) => {
+          return (
+            <ProvisionMessage
+              messages={content}
+              onClick={() => {
+                setPopupData({
+                  data: <pre>{JSON.stringify(content, null, 2)}</pre>,
+                  title: "Provision Messages",
+                });
+              }}
+            />
+          );
+        },
+      },
+      {
         title: "Provision Data",
         accessor: "provision_data",
         render: (content) => {
-          return <pre>{JSON.stringify(content, null, 2)}</pre>;
+          return (
+            <ProvisionData
+              provisionData={content}
+              onClick={() => {
+                setPopupData({
+                  data: <pre>{JSON.stringify(content, null, 2)}</pre>,
+                  title: "Provision Data",
+                });
+              }}
+            />
+          );
         },
       },
     ];
 
     const rows = resources.map((resource, index) => {
-      console.log(index, resource.provision_data);
       return {
         key: resource.id,
         original: resource,
@@ -42,13 +85,21 @@ export const ResourceTable = ({ resources }) => {
 
   const [columns, rows] = serializeResourcesToTableObject(resources);
   return (
-    <Table cells={columns} rows={rows} caption="Resource Claims">
+    <Table cells={columns} rows={rows} caption="Resources">
       <TableHeader />
       <TableBody
         rowKey={({ rowData }) => {
           return rowData.key;
         }}
       />
+      {!!popupData && (
+        <AdditionalInfoPopup
+          title={popupData?.title}
+          content={popupData?.data}
+          onClose={() => setPopupData(null)}
+          isOpen={!!popupData}
+        />
+      )}
     </Table>
   );
 };

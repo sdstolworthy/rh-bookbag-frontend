@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal } from "@patternfly/react-core";
-export const AdditionalInfoPopup = ({ data, onClose, title, isOpen }) => {
+export const AdditionalInfoPopup = ({ content, onClose, title, isOpen }) => {
   return (
     <React.Fragment>
       <Modal
@@ -15,7 +15,7 @@ export const AdditionalInfoPopup = ({ data, onClose, title, isOpen }) => {
         ]}
         isFooterLeftAligned
       >
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        {content}
       </Modal>
     </React.Fragment>
   );

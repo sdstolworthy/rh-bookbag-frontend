@@ -11,6 +11,8 @@ import {
   Avatar,
 } from "@patternfly/react-core";
 
+import {NavDefaultList} from '../components/sidebar_nav'
+
 import propTypes from "prop-types";
 
 export const MainTemplate = React.memo(({ children }) => {
@@ -47,7 +49,9 @@ export const MainTemplate = React.memo(({ children }) => {
         ></PageHeader>
       }
       isManagedSidebar={true}
-      sidebar={<PageSidebar isManagedSidebar theme="dark" nav={<div />} />}
+      sidebar={
+        <PageSidebar isManagedSidebar theme="dark" nav={<NavDefaultList />} />
+      }
       style={{ height: "100vh" }}
     >
       {children}

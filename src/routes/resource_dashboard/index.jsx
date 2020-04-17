@@ -23,7 +23,7 @@ export const ResourceDashboard = () => {
     <>
       <PageSection>
         <div className="pf-c-content">
-          <Text component={TextVariants.h1}>Lab Instances</Text>
+          <Text component={TextVariants.h1}>Resources</Text>
         </div>
       </PageSection>
       <PageSection>

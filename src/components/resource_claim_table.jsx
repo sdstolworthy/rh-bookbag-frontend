@@ -12,8 +12,8 @@ export const ResourceClaimTable = ({ resourceClaims }) => {
         accessor: "name",
       },
       {
-        title: "ID",
-        accessor: "id",
+        title: "Namespace",
+        accessor: "namespace",
       },
     ];
     const rows = [

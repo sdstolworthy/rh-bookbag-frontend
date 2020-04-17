@@ -13,26 +13,18 @@ export const Routes = () => {
           <Redirect exact from="/" to="/resource_claims" />
           <Route path={["/resource_claims", "/resources"]}>
             <MainTemplate>
-              <Switch>
-                <Route path="/resource_claims">
-                  {(props) => {
-                    return (
-                      <ResourceClaimsProvider>
-                        <ResourceClaimsDashboard {...props} />
-                      </ResourceClaimsProvider>
-                    );
-                  }}
-                </Route>
-                <Route path="/resources">
-                  {(props) => {
-                    return (
-                      <ResourceProvider>
-                        <ResourceDashboard {...props} />;
-                      </ResourceProvider>
-                    );
-                  }}
-                </Route>
-              </Switch>
+              <ResourceClaimsProvider>
+                <ResourceProvider>
+                  <Switch>
+                    <Route path="/resource_claims">
+                      <ResourceClaimsDashboard />
+                    </Route>
+                    <Route path="/resources">
+                      <ResourceDashboard />
+                    </Route>
+                  </Switch>
+                </ResourceProvider>
+              </ResourceClaimsProvider>
             </MainTemplate>
           </Route>
         </Switch>
