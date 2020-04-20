@@ -1,4 +1,4 @@
-import { Configuration } from "../../models/configuration";
+import { Configuration } from "../../schemas/configuration";
 
 export class StaticConfigurationRepository {
   async getConfiguration() {

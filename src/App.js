@@ -2,7 +2,7 @@ import React from "react";
 import { Routes } from "./routes";
 import { RepositoryContextProvider } from "./contexts/repository";
 import { ConfigContextProvider } from "./contexts/config";
-import { StaticConfigurationRepository } from "./repositories/configuration/backendV1ConfigurationRepository";
+import { StaticConfigurationRepository } from "./services/configuration/backendv1_config_service";
 
 function App() {
   return (

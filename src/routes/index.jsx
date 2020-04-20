@@ -19,9 +19,13 @@ export const Routes = () => {
                     <Route path="/resource_claims">
                       <ResourceClaimsDashboard />
                     </Route>
-                    <Route path="/resources">
+                    <Route path="/resources/:id">
+                      <div></div>
+                    </Route>
+                    <Route exact path="/resources">
                       <ResourceDashboard />
                     </Route>
+                    <Redirect exact from="/resources/" to="/resources" />
                   </Switch>
                 </ResourceProvider>
               </ResourceClaimsProvider>

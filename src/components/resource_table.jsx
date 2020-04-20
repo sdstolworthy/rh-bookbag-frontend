@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, TableHeader, TableBody } from "@patternfly/react-table";
 import { AdditionalInfoPopup } from "./additional_info_popup";
+import { useHistory } from "react-router";
 
 const ProvisionData = ({ provisionData, onClick }) => {
   return provisionData ? (
@@ -19,6 +20,7 @@ const ProvisionMessage = ({ messages, onClick }) => {
 
 export const ResourceTable = ({ resources }) => {
   const [popupData, setPopupData] = useState(null);
+  const history = useHistory();
 
   function serializeResourcesToTableObject(resources) {
     const columns = [
@@ -88,6 +90,9 @@ export const ResourceTable = ({ resources }) => {
     <Table cells={columns} rows={rows} caption="Resources">
       <TableHeader />
       <TableBody
+        // onRowClick={(_, { key }) => {
+        //   history.push(`/resources/${key}`);
+        // }}
         rowKey={({ rowData }) => {
           return rowData.key;
         }}

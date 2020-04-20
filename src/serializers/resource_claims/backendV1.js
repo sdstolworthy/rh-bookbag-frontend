@@ -1,4 +1,4 @@
-import { ResourceClaim } from "../../models/resource_claim";
+import { ResourceClaim } from "../../schemas/resource_claim";
 import { BackendV1ResourceSerializer } from "../resource/backendV1";
 
 export class BackendV1ResourceClaimSerializer {

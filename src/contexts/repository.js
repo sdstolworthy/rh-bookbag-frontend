@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { ConfigContext } from "./config";
-import { BackendV1ResourceClaimsRepository } from "../repositories/resource_claims_repository/backendv1_resource_claims_repository";
-import { BackendV1ResourcesRepository } from "../repositories/resources_repository/backendv1_resource_repository";
+import { BackendV1ResourceClaimsRepository } from "../services/resource_claims_service/backendv1_resource_claims_service";
+import { BackendV1ResourcesRepository } from "../services/resources_service/backendv1_resource_service";
 
 export const RepositoryContext = createContext({
   resourceClaimRepository: null,

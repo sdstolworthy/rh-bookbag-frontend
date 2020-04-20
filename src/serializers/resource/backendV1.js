@@ -1,4 +1,4 @@
-import { Resource } from "../../models/resource";
+import { Resource } from "../../schemas/resource";
 
 export class BackendV1ResourceSerializer {
   static serialize(map) {
