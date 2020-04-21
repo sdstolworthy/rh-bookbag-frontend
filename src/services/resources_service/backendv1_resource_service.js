@@ -17,4 +17,20 @@ export class BackendV1ResourcesRepository {
       });
     return resources;
   }
+
+  async modifyResourceState(resourceName, newState) {
+    const resource = await fetch(
+      `${this.backendBaseUrl}/api/resources/${resourceName}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          operation: newState,
+        }),
+      }
+    );
+    return resource;
+  }
 }

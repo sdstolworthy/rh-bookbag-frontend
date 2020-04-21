@@ -5,6 +5,7 @@ export class BackendV1ResourceSerializer {
     return new Resource({
       current_state: map["current_state"],
       id: map["id"],
+      name: map["name"],
       governor: map["governor"],
       provision_data: map["provision_data"],
       provision_messages: map["provision_messages"],

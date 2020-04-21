@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Table, TableHeader, TableBody } from "@patternfly/react-table";
 import { AdditionalInfoPopup } from "./additional_info_popup";
+import { PowerOffIcon, PauseCircleIcon } from "@patternfly/react-icons";
+import { ResourceContext } from "../contexts/resource";
 import { useHistory } from "react-router";
-
 const ProvisionData = ({ provisionData, onClick }) => {
   return provisionData ? (
     <div onClick={onClick}>See Data</div>
@@ -20,10 +21,14 @@ const ProvisionMessage = ({ messages, onClick }) => {
 
 export const ResourceTable = ({ resources }) => {
   const [popupData, setPopupData] = useState(null);
+  const resourceContext = useContext(ResourceContext);
   const history = useHistory();
-
   function serializeResourcesToTableObject(resources) {
     const columns = [
+      {
+        title: "Resource Name",
+        accessor: "name",
+      },
       {
         title: "Current State",
         accessor: "current_state",
@@ -38,7 +43,7 @@ export const ResourceTable = ({ resources }) => {
         render: (content) => {
           return (
             <ProvisionMessage
-              messages={content}
+              messages={content["provision_messages"]}
               onClick={() => {
                 setPopupData({
                   data: <pre>{JSON.stringify(content, null, 2)}</pre>,
@@ -55,14 +60,60 @@ export const ResourceTable = ({ resources }) => {
         render: (content) => {
           return (
             <ProvisionData
-              provisionData={content}
+              provisionData={content["provision_data"]}
               onClick={() => {
                 setPopupData({
-                  data: <pre>{JSON.stringify(content, null, 2)}</pre>,
+                  data: (
+                    <pre>
+                      {JSON.stringify(content["provision_data"], null, 2)}
+                    </pre>
+                  ),
                   title: "Provision Data",
                 });
               }}
             />
+          );
+        },
+      },
+      {
+        title: "Available Actions",
+        accessor: "current_state",
+        render: (content) => {
+          const ActionIcon = () => {
+            switch (content["current_state"]) {
+              case "started":
+                return <PauseCircleIcon color="red" />;
+              case "stopped":
+                return <PowerOffIcon color="green" />;
+              default:
+                return null;
+            }
+          };
+          const getNewActionName = () => {
+            switch (content["current_state"]) {
+              case "started":
+                return "stop";
+              case "stopped":
+                return "start";
+              default:
+                return null;
+            }
+          };
+          return (
+            <div
+              style={{ height: 50, width: 50, cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                const action = getNewActionName();
+                if (!action) {
+                  return;
+                }
+                resourceContext.modifyResourceState(content["name"], action);
+              }}
+            >
+              <ActionIcon />
+            </div>
           );
         },
       },
@@ -75,7 +126,7 @@ export const ResourceTable = ({ resources }) => {
         cells: columns.map((column) => {
           if (column.render) {
             return {
-              title: column.render(resource[column.accessor]),
+              title: column.render(resource),
             };
           }
           return resource[column.accessor];
@@ -90,11 +141,11 @@ export const ResourceTable = ({ resources }) => {
     <Table cells={columns} rows={rows} caption="Resources">
       <TableHeader />
       <TableBody
-        // onRowClick={(_, { key }) => {
-        //   history.push(`/resources/${key}`);
-        // }}
         rowKey={({ rowData }) => {
           return rowData.key;
+        }}
+        onRowClick={(_, { original }) => {
+          history.push(`/resources/${original["name"]}`);
         }}
       />
       {!!popupData && (

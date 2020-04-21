@@ -4,26 +4,27 @@ import { RepositoryContext } from "./repository";
 
 export const ResourceContext = React.createContext({
   getResources: async (resourceClaimFilter) => {},
-  getResourceById: async (id) => {},
+  modifyResourceState: async (resourceName, newState) => {},
   resources: null,
 });
 
 export const ResourceProvider = ({ children }) => {
   const [resources, setResources] = useState(null);
-  
+
   const repositoryContext = useContext(RepositoryContext);
 
   const getResources = useCallback(async () => {
-    const claims = await repositoryContext?.resourceRepository?.getResources();
-    setResources(claims);
+    const fetchedResources = await repositoryContext?.resourceRepository?.getResources();
+    setResources(fetchedResources);
   }, [repositoryContext]);
 
-  const getResourceById = useCallback(
-    async (id) => {
-      const resource = await repositoryContext?.resourceRepository?.getResourceById(
-        id
+  const modifyResourceState = useCallback(
+    async (resourceName, newState) => {
+      await repositoryContext?.resourceRepository?.modifyResourceState(
+        resourceName,
+        newState
       );
-      return resource;
+      return;
     },
     [repositoryContext]
   );
@@ -32,8 +33,8 @@ export const ResourceProvider = ({ children }) => {
     <ResourceContext.Provider
       value={{
         getResources,
-        getResourceById,
         resources,
+        modifyResourceState,
       }}
     >
       {children}
