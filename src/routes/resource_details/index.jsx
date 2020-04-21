@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, Redirect } from "react-router";
-import { PageSection, TextVariants, Text } from "@patternfly/react-core";
+import {
+  PageSection,
+  TextVariants,
+  Text,
+  PageSectionVariants,
+} from "@patternfly/react-core";
 import { ResourceContext } from "../../contexts/resource";
+import { Table, TableBody } from "@patternfly/react-table";
 
 export const ResourceDetailsRoute = () => {
   const params = useParams();
@@ -27,6 +33,24 @@ export const ResourceDetailsRoute = () => {
   if (!resourceName) {
     return <Redirect to="/resources" />;
   }
+  const columns = [
+    {
+      title: "key",
+    },
+    {
+      title: "value",
+    },
+  ];
+  const rows = selectedResource
+    ? Object.keys(selectedResource).map((key) => {
+        return [
+          key,
+          {
+            title: <pre>{JSON.stringify(selectedResource[key], null, 2)}</pre>,
+          },
+        ];
+      })
+    : [];
 
   return (
     <>
@@ -35,8 +59,10 @@ export const ResourceDetailsRoute = () => {
           <Text component={TextVariants.h1}>Resources</Text>
         </div>
       </PageSection>
-      <PageSection>
-        <pre>{JSON.stringify(selectedResource, null, 2)}</pre>
+      <PageSection variant={PageSectionVariants.light}>
+        <Table caption="Resource Details" cells={columns} rows={rows}>
+          <TableBody />
+        </Table>
       </PageSection>
     </>
   );
