@@ -1,4 +1,4 @@
-import { BackendV1ResourceSerializer } from "../../serializers/resource/backendV1";
+import { BackendV1ResourceSerializer } from "../../serializers/resource/serializer_resource_backendv1";
 
 export class BackendV1ResourcesRepository {
   constructor({ backendBaseUrl }) {

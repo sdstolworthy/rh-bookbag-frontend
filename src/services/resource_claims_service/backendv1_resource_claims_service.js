@@ -1,4 +1,4 @@
-import { BackendV1ResourceClaimSerializer } from "../../serializers/resource_claims/backendV1";
+import { BackendV1ResourceClaimSerializer } from "../../serializers/resource_claims/serializer_resource_claim_backend_v1";
 
 export class BackendV1ResourceClaimsRepository {
   constructor({ backendBaseUrl }) {

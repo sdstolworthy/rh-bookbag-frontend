@@ -3,7 +3,7 @@ import { Table, TableHeader, TableBody } from "@patternfly/react-table";
 import { AdditionalInfoPopup } from "./additional_info_popup";
 import { PowerOffIcon, PauseCircleIcon } from "@patternfly/react-icons";
 import { ResourceContext } from "../contexts/resource";
-import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 const ProvisionData = ({ provisionData, onClick }) => {
   return provisionData ? (
     <div onClick={onClick}>See Data</div>
@@ -22,7 +22,6 @@ const ProvisionMessage = ({ messages, onClick }) => {
 export const ResourceTable = ({ resources }) => {
   const [popupData, setPopupData] = useState(null);
   const resourceContext = useContext(ResourceContext);
-  const history = useHistory();
   function serializeResourcesToTableObject(resources) {
     const columns = [
       {
@@ -117,6 +116,12 @@ export const ResourceTable = ({ resources }) => {
           );
         },
       },
+      {
+        title: "More Details",
+        render: (content) => {
+          return <Link to={`/resources/${content["name"]}`}>More Details</Link>;
+        },
+      },
     ];
 
     const rows = resources.map((resource, index) => {
@@ -144,9 +149,9 @@ export const ResourceTable = ({ resources }) => {
         rowKey={({ rowData }) => {
           return rowData.key;
         }}
-        onRowClick={(_, { original }) => {
-          history.push(`/resources/${original["name"]}`);
-        }}
+        // onRowClick={(_, { original }) => {
+        //   history.push(`/resources/${original["name"]}`);
+        // }}
       />
       {!!popupData && (
         <AdditionalInfoPopup

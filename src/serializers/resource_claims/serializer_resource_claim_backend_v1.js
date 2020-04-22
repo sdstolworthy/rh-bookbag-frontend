@@ -1,5 +1,5 @@
 import { ResourceClaim } from "../../schemas/resource_claim";
-import { BackendV1ResourceSerializer } from "../resource/backendV1";
+import { BackendV1ResourceSerializer } from "../resource/serializer_resource_backendv1";
 
 export class BackendV1ResourceClaimSerializer {
   static serialize(map) {
