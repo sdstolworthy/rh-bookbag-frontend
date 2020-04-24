@@ -33,7 +33,7 @@ export const ResourceProvider = ({ children }) => {
   const attemptRedelete = useCallback(
     async (namespace, name) => {
       await repositoryContext?.resourceRepository?.dispatchAction(
-        "delete",
+        "destroy",
         namespace,
         name
       );
