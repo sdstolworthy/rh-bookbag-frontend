@@ -2,12 +2,12 @@ import React from "react";
 import { PageSection, Text, TextVariants } from "@patternfly/react-core";
 import propTypes from "prop-types";
 import { useContext } from "react";
-import { ResourceClaims } from "../../contexts/resource_claims";
+import { ResourceClaimsContext } from "../../contexts/resource_claims";
 import { useEffect } from "react";
 import { ResourceClaimTable } from "../../components/resource_claim_table";
 
 export const ResourceClaimsDashboard = () => {
-  const resourceClaimContext = useContext(ResourceClaims);
+  const resourceClaimContext = useContext(ResourceClaimsContext);
 
   useEffect(() => {
     if (resourceClaimContext.resourceClaims === null) {

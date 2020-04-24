@@ -12,6 +12,9 @@ export class BackendV1ResourceSerializer {
       provision_data: map["provision_data"],
       provision_messages: map["provision_messages"],
       resource_handle_name: map["resource_handle_name"],
+      deletion_time: map["deletion_timestamp"]
+        ? new Date(map["deletion_timestamp"])
+        : null,
     });
   }
 }

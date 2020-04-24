@@ -1,9 +1,15 @@
 import React, { useState, useContext } from "react";
 import { Table, TableHeader, TableBody } from "@patternfly/react-table";
 import { AdditionalInfoPopup } from "./additional_info_popup";
-import { PowerOffIcon, PauseCircleIcon } from "@patternfly/react-icons";
+import {
+  PowerOffIcon,
+  PauseCircleIcon,
+  RebootingIcon,
+} from "@patternfly/react-icons";
 import { ResourceContext } from "../contexts/resource";
 import { Link } from "react-router-dom";
+import { css } from "@patternfly/react-styles";
+import styles from "@patternfly/react-styles/css/components/Table/table";
 const ProvisionData = ({ provisionData, onClick }) => {
   return provisionData ? (
     <div onClick={onClick}>See Data</div>
@@ -78,15 +84,28 @@ export const ResourceTable = ({ resources }) => {
         title: "Available Actions",
         accessor: "current_state",
         render: (content) => {
+          const d = content["deletion_time"];
           const ActionIcon = () => {
-            switch (content["current_state"]) {
-              case "started":
-                return <PauseCircleIcon color="red" />;
-              case "stopped":
-                return <PowerOffIcon color="green" />;
-              default:
-                return null;
+            if (content["deletion_time"]) {
+              if (d.setHours(d.getHours() + 2) < new Date()) {
+                return (
+                  <span>
+                    <RebootingIcon />
+                    Retry Delete
+                  </span>
+                );
+              }
+            } else if (content["current_state"]) {
+              switch (content["current_state"]) {
+                case "started":
+                  return <PauseCircleIcon color="red" />;
+                case "stopped":
+                  return <PowerOffIcon color="green" />;
+                default:
+                  return null;
+              }
             }
+            return null;
           };
           const getNewActionName = () => {
             switch (content["current_state"]) {
@@ -140,18 +159,47 @@ export const ResourceTable = ({ resources }) => {
     });
     return [columns, rows];
   }
+  const RowWrapper = ({
+    trRef,
+    className,
+    rowProps,
+    row: { isExpanded, isHeightAuto, original },
+    ...props
+  }) => {
+    const d = original?.deletion_time
+    const isDisabled =
+      !!d && d.setHours(d.getHours() + 2) < new Date();
+    return (
+      <tr
+        {...props}
+        ref={trRef}
+        className={css(
+          className,
+          isExpanded !== undefined && styles.tableExpandableRow,
+          isExpanded && styles.modifiers.expanded,
+          isHeightAuto && styles.modifiers.heightAuto
+        )}
+        hidden={isExpanded !== undefined && !isExpanded}
+        style={
+          isDisabled ? { textDecoration: "line-through", color: "grey" } : {}
+        }
+      />
+    );
+  };
 
   const [columns, rows] = serializeResourcesToTableObject(resources);
   return (
-    <Table cells={columns} rows={rows} caption="Resources">
+    <Table
+      cells={columns}
+      rows={rows}
+      caption="Resources"
+      rowWrapper={RowWrapper}
+    >
       <TableHeader />
       <TableBody
         rowKey={({ rowData }) => {
           return rowData.key;
         }}
-        // onRowClick={(_, { original }) => {
-        //   history.push(`/resources/${original["name"]}`);
-        // }}
       />
       {!!popupData && (
         <AdditionalInfoPopup

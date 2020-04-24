@@ -19,4 +19,13 @@ export class BackendV1ResourceClaimsRepository {
       });
     return resourceClaims;
   }
+
+  async deleteResourceClaim(claimNamespace, claimName) {
+    await fetch(
+      `${this.backendBaseUrl}/api/resource_claims/${claimNamespace}/${claimName}`,
+      {
+        method: "DELETE",
+      }
+    );
+  }
 }

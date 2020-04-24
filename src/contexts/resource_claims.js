@@ -2,9 +2,10 @@ import React, { useContext } from "react";
 import { useCallback, useState } from "react";
 import { RepositoryContext } from "./repository";
 
-export const ResourceClaims = React.createContext({
+export const ResourceClaimsContext = React.createContext({
   getResourceClaims: (resourceClaimFilter) => {},
   resourceClaims: null,
+  deleteResourceClaim: () => {},
 });
 
 export const ResourceClaimsProvider = ({ children }) => {
@@ -15,14 +16,25 @@ export const ResourceClaimsProvider = ({ children }) => {
     setResourceClaims(claims);
   }, [repositoryContext]);
 
+  const deleteResourceClaim = useCallback(
+    async (claimNamespace, claimName) => {
+      repositoryContext.resourceClaimRepository.deleteResourceClaim(
+        claimNamespace,
+        claimName
+      );
+    },
+    [repositoryContext]
+  );
+
   return (
-    <ResourceClaims.Provider
+    <ResourceClaimsContext.Provider
       value={{
         getResourceClaims,
         resourceClaims,
+        deleteResourceClaim,
       }}
     >
       {children}
-    </ResourceClaims.Provider>
+    </ResourceClaimsContext.Provider>
   );
 };
