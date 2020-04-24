@@ -18,9 +18,17 @@ export class BackendV1ResourcesRepository {
     return resources;
   }
 
+  async dispatchAction(action, namespace, name) {
+    const resource = await fetch(
+      `${this.backendBaseUrl}/api/resources/dispatch/${namespace}/${name}/${action}`,
+      { method: "GET" }
+    );
+    return resource;
+  }
+
   async modifyResourceState(resourceName, newState) {
     const resource = await fetch(
-      `${this.backendBaseUrl}/api/resources/${resourceName}`,
+      `${this.backendBaseUrl}/api/resources/modify/${resourceName}`,
       {
         method: "PATCH",
         headers: {

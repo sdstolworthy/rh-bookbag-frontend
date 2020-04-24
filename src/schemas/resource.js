@@ -8,11 +8,13 @@ export class Resource {
     resource_handle_name = "",
     governor = "",
     jobVars = {},
+    namespace = "",
     deletion_time = null,
     tower_jobs = [],
   }) {
     this.current_state = current_state;
     this.provision_data = provision_data;
+    this.namespace = namespace;
     this.id = id;
     this.name = name;
     this.resource_handle_name = resource_handle_name;
@@ -22,6 +24,7 @@ export class Resource {
     this.tower_jobs = tower_jobs;
     this.deletion_time = deletion_time;
   }
+  namespace = "";
   name = "";
   job_vars = {};
   tower_jobs = [];

@@ -6,6 +6,7 @@ export const ResourceContext = React.createContext({
   getResources: async (resourceClaimFilter) => {},
   modifyResourceState: async (resourceName, newState) => {},
   resources: null,
+  attemptRedelete: () => {},
 });
 
 export const ResourceProvider = ({ children }) => {
@@ -29,12 +30,24 @@ export const ResourceProvider = ({ children }) => {
     [repositoryContext]
   );
 
+  const attemptRedelete = useCallback(
+    async (namespace, name) => {
+      await repositoryContext?.resourceRepository?.dispatchAction(
+        "delete",
+        namespace,
+        name
+      );
+    },
+    [repositoryContext]
+  );
+
   return (
     <ResourceContext.Provider
       value={{
         getResources,
         resources,
         modifyResourceState,
+        attemptRedelete,
       }}
     >
       {children}

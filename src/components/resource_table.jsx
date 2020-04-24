@@ -89,18 +89,55 @@ export const ResourceTable = ({ resources }) => {
             if (content["deletion_time"]) {
               if (d.setHours(d.getHours() + 2) < new Date()) {
                 return (
-                  <span>
-                    <RebootingIcon />
-                    Retry Delete
-                  </span>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      resourceContext.attemptRedelete(
+                        content["namespace"],
+                        content["name"]
+                      );
+                    }}
+                  >
+                    <span>
+                      <RebootingIcon />
+                      &nbsp; Retry Delete
+                    </span>
+                  </div>
                 );
               }
             } else if (content["current_state"]) {
+              const IconWrapper = ({ children }) => (
+                <div
+                  style={{ height: 50, width: 50, cursor: "pointer" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    const action = getNewActionName();
+                    if (!action) {
+                      return;
+                    }
+                    resourceContext.modifyResourceState(
+                      content["name"],
+                      action
+                    );
+                  }}
+                >
+                  {children}
+                </div>
+              );
               switch (content["current_state"]) {
                 case "started":
-                  return <PauseCircleIcon color="red" />;
+                  return (
+                    <IconWrapper>
+                      <PauseCircleIcon color="red" />
+                    </IconWrapper>
+                  );
                 case "stopped":
-                  return <PowerOffIcon color="green" />;
+                  return (
+                    <IconWrapper>
+                      <PowerOffIcon color="green" />
+                    </IconWrapper>
+                  );
                 default:
                   return null;
               }
@@ -117,22 +154,7 @@ export const ResourceTable = ({ resources }) => {
                 return null;
             }
           };
-          return (
-            <div
-              style={{ height: 50, width: 50, cursor: "pointer" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                const action = getNewActionName();
-                if (!action) {
-                  return;
-                }
-                resourceContext.modifyResourceState(content["name"], action);
-              }}
-            >
-              <ActionIcon />
-            </div>
-          );
+          return <ActionIcon />;
         },
       },
       {
@@ -166,9 +188,8 @@ export const ResourceTable = ({ resources }) => {
     row: { isExpanded, isHeightAuto, original },
     ...props
   }) => {
-    const d = original?.deletion_time
-    const isDisabled =
-      !!d && d.setHours(d.getHours() + 2) < new Date();
+    const d = original?.deletion_time;
+    const isDisabled = !!d && d.setHours(d.getHours() + 2) < new Date();
     return (
       <tr
         {...props}
@@ -180,9 +201,7 @@ export const ResourceTable = ({ resources }) => {
           isHeightAuto && styles.modifiers.heightAuto
         )}
         hidden={isExpanded !== undefined && !isExpanded}
-        style={
-          isDisabled ? { textDecoration: "line-through", color: "grey" } : {}
-        }
+        style={isDisabled ? { color: "grey" } : {}}
       />
     );
   };

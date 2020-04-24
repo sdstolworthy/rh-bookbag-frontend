@@ -9,6 +9,7 @@ export class BackendV1ResourceSerializer {
       governor: map["governor"],
       job_vars: map["job_vars"],
       tower_jobs: map["tower_jobs"],
+      namespace: map["namespace"],
       provision_data: map["provision_data"],
       provision_messages: map["provision_messages"],
       resource_handle_name: map["resource_handle_name"],
